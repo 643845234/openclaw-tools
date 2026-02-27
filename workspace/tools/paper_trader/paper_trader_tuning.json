@@ -1,0 +1,17 @@
+{
+  "current": {
+    "rsiOversold": 31,
+    "rsiOverbought": 71,
+    "stopLossPercent": 0.0225,
+    "takeProfitPercent": 0.052500000000000005
+  },
+  "best": {
+    "rsiOversold": 30,
+    "rsiOverbought": 70,
+    "stopLossPercent": 0.02,
+    "takeProfitPercent": 0.05
+  },
+  "bestScore": -0.02275918100829699,
+  "lastScore": -0.02275918100829699,
+  "updatedAt": 1772112928254
+}
