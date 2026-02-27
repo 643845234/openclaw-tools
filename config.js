@@ -40,7 +40,7 @@ module.exports = {
   // Trading parameters
   startingCapital: 1000, // $100 USD
   tradingWindow: 7 * 24 * 60 * 60 * 1000, // 1 week in ms
-  checkInterval: 60 * 1000, // 1 minute in ms
+  checkInterval: 15 * 1000, // 1 minute in ms
   
   // Binance API
   binance: {
@@ -90,15 +90,15 @@ module.exports = {
 
   // Leverage / short (paper simulation)
   leverage: {
-    enabled: false,
+    enabled: true,
     min: 2,
     max: 10,
-    default: 3,
+    default: 5,
     mode: 'fixed', // 'fixed' | 'score'
     enableShort: false,
   },
   
   // Backtesting
-  backtestCandles: 1000, // Use last 100 candles for backtesting
+  backtestCandles: 2500, // Use last 2500 candles for backtesting
   candleInterval: '5m', // 5-minute candles
 };

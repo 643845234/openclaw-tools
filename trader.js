@@ -57,26 +57,6 @@ class PaperTrader {
   async initialize() {
     agentMessage('log', { message: '🚀 Paper Trader Initializing...' });
     const cfg = this.tunedConfig || config;
-
-    const leverageCfg = cfg.leverage || {};
-    const leverageEnabled = Boolean(leverageCfg.enabled);
-    const shortEnabled = Boolean(leverageCfg.enableShort);
-    const levMin = typeof leverageCfg.min === 'number' ? leverageCfg.min : 1;
-    const levMax = typeof leverageCfg.max === 'number' ? leverageCfg.max : 1;
-    const levDefault = typeof leverageCfg.default === 'number' ? leverageCfg.default : 1;
-    const levMode = typeof leverageCfg.mode === 'string' ? leverageCfg.mode : 'fixed';
-
-    const chooseLeverage = (score) => {
-      if (!leverageEnabled) return 1;
-      const min = Math.max(1, levMin);
-      const max = Math.max(min, levMax);
-      if (levMode === 'score') {
-        const s = typeof score === 'number' && Number.isFinite(score) ? Math.max(0, Math.min(score, 1)) : 0;
-        const raw = min + (max - min) * s;
-        return Math.max(min, Math.min(max, Math.round(raw)));
-      }
-      return Math.max(min, Math.min(max, Math.round(levDefault)));
-    };
     agentMessage('log', { message: `🏦 Exchange: ${cfg.exchange}` });
     agentMessage('log', { message: `💰 Starting Capital: $${cfg.startingCapital}` });
     agentMessage('log', { message: `⏱️  Trading Window: ${cfg.tradingWindow / 60000} minutes` });
@@ -101,6 +81,26 @@ class PaperTrader {
 ━━━ Cycle ${this.cycleCount} | ${now} ━━━` });
 
     const cfg = this.tunedConfig || config;
+
+    const leverageCfg = cfg.leverage || {};
+    const leverageEnabled = Boolean(leverageCfg.enabled);
+    const shortEnabled = Boolean(leverageCfg.enableShort);
+    const levMin = typeof leverageCfg.min === 'number' ? leverageCfg.min : 1;
+    const levMax = typeof leverageCfg.max === 'number' ? leverageCfg.max : 1;
+    const levDefault = typeof leverageCfg.default === 'number' ? leverageCfg.default : 1;
+    const levMode = typeof leverageCfg.mode === 'string' ? leverageCfg.mode : 'fixed';
+
+    const chooseLeverage = (score) => {
+      if (!leverageEnabled) return 1;
+      const min = Math.max(1, levMin);
+      const max = Math.max(min, levMax);
+      if (levMode === 'score') {
+        const s = typeof score === 'number' && Number.isFinite(score) ? Math.max(0, Math.min(score, 1)) : 0;
+        const raw = min + (max - min) * s;
+        return Math.max(min, Math.min(max, Math.round(raw)));
+      }
+      return Math.max(min, Math.min(max, Math.round(levDefault)));
+    };
 
     const opportunities = [];
 
@@ -208,9 +208,11 @@ class PaperTrader {
           const result = this.paperEngine.sell(opp.symbol, currentPrice, Date.now(), exitTrigger.type);
           if (result.success) {
             const payload = {
-              action: 'SELL',
+              action: 'CLOSE',
               symbol: opp.symbol,
               price: currentPrice,
+              side: result.trade.side,
+              leverage: result.trade.leverage,
               profitPercent: result.trade.profitPercent,
               profit: result.trade.profit,
               reason: exitTrigger.type,
