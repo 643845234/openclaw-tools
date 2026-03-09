@@ -1,0 +1,16 @@
+{
+  "name": "dash_invest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "^0.17.2",
+    "puppeteer": "^24.38.0"
+  }
+}
